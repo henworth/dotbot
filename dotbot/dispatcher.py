@@ -35,6 +35,7 @@ class Dispatcher(object):
                     self._context.set_defaults(task[action]) # replace, not update
                     handled = True
                     # keep going, let other plugins handle this if they want
+                self._load_plugins()
                 for plugin in self._plugins:
                     if plugin.can_handle(action):
                         try:
