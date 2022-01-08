@@ -121,7 +121,7 @@ def main():
         plugins = []
         plugin_directories = list(options.plugin_dirs)
         if not options.disable_built_in_plugins:
-            plugins.extend([Clean, Create, Link, Shell, Plugins])
+            plugins.extend([Clean, Create, Link, Plugins, Shell])
         plugin_paths = []
         for directory in plugin_directories:
             for plugin_path in glob.glob(os.path.join(directory, "*.py")):

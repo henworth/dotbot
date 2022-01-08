@@ -1,8 +1,9 @@
 import os
 from argparse import Namespace
-from .plugin import Plugin
+
 from .context import Context
 from .messenger import Messenger
+from .plugin import Plugin
 
 
 class Dispatcher(object):
@@ -41,11 +42,13 @@ class Dispatcher(object):
                 ) and action != "defaults":
                     self._log.info("Skipping action %s" % action)
                     continue
+
                 handled = False
                 if action == "defaults":
                     self._context.set_defaults(task[action])  # replace, not update
                     handled = True
                     # keep going, let other plugins handle this if they want
+
                 for plugin in self._plugins:
                     if plugin.can_handle(action):
                         try:
@@ -58,21 +61,34 @@ class Dispatcher(object):
                             handled = True
                             if action == "plugins":
                                 # Reload all plugins if there is a `plugins` config action
-                                self._plugins = [plugin(self._context) for plugin in Plugin.__subclasses__()]
+                                self._plugins = [
+                                    plugin(self._context) for plugin in Plugin.__subclasses__()
+                                ]
                         except Exception as err:
                             self._log.error(
                                 "An error was encountered while executing action %s" % action
                             )
                             self._log.debug(err)
                             if self._exit:
-                                # There was an execption exit
+                                # There was an exception exit
                                 return False
+
                 if not handled:
                     success = False
                     self._log.error("Action %s not handled" % action)
                     if self._exit:
                         # Invalid action exit
                         return False
+
+                if action == "plugins":
+                    # Create a list of loaded plugin names
+                    loaded_plugins = [plugin.__class__.__name__ for plugin in self._plugins]
+
+                    # Load plugins that haven't been loaded yet
+                    for plugin in Plugin.__subclasses__():
+                        if plugin.__name__ not in loaded_plugins:
+                            self._plugins.append(plugin(self._context))
+
         return success
 
 

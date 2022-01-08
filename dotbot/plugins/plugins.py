@@ -1,5 +1,5 @@
-import os
 import glob
+import os
 
 from ..plugin import Plugin
 from ..util import module
