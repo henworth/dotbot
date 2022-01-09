@@ -429,10 +429,14 @@ See [here](plugins) for a current list of plugins.
 #### Format
 
 Plugins can be loaded either by the command-line arguments `--plugin` or
-`--plugin-dir` or by the `plugins` directive. The command-line arguments
-take either absolute paths or paths relative to the base directory, multiple
-arguments can be added, one for each plugin. If using the command-line 
-option, it is recommended that these are added directly to the `install` script.
+`--plugin-dir` or by the `plugins` directive. Each of these take either
+absolute paths or paths relative to the base directory.
+
+When using command-line arguments to load multiple plugins you must add
+one argument for each plugin to be loaded. It is recommended to place
+these command-line arguments directly in the `install` script.
+
+The `plugins` config directive is specified as an array of paths to load.
 
 #### Example
 
