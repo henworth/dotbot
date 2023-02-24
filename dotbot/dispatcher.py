@@ -1,6 +1,6 @@
 import os
 from argparse import Namespace
-
+from .plugin import Plugin
 from .context import Context
 from .messenger import Messenger
 
@@ -56,6 +56,9 @@ class Dispatcher(object):
                                 return False
                             success &= local_success
                             handled = True
+                            if action == "plugins":
+                                # Reload all plugins if there is a `plugins` config action
+                                self._plugins = [plugin(self._context) for plugin in Plugin.__subclasses__()]
                         except Exception as err:
                             self._log.error(
                                 "An error was encountered while executing action %s" % action
