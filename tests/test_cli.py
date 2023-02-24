@@ -159,6 +159,27 @@ def test_plugin_loading_directory(home, dotfiles, run_dotbot):
         assert file.read() == "directory plugin loading works"
 
 
+def test_plugin_loading_config_file(home, dotfiles, run_dotbot):
+    """Verify that plugins can be loaded by config file."""
+
+    dotfiles.makedirs("plugins")
+    plugin_file = os.path.join(
+        os.path.dirname(os.path.abspath(__file__)), "dotbot_plugin_config_file.py"
+    )
+    shutil.copy(plugin_file, os.path.join(dotfiles.directory, "plugins", "config_file.py"))
+
+    dotfiles.write_config(
+        [
+            {"plugins": [os.path.join(dotfiles.directory, "plugins")]},
+            {"plugin_config_file": "~"},
+        ]
+    )
+    run_dotbot()
+
+    with open(os.path.join(home, "flag"), "r") as file:
+        assert file.read() == "config file plugin loading works"
+
+
 def test_disable_builtin_plugins(home, dotfiles, run_dotbot):
     """Verify that builtin plugins can be disabled."""
 
