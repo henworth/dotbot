@@ -1,8 +1,8 @@
-from setuptools import setup, find_packages
+import re
 from codecs import open  # For a consistent encoding
 from os import path
-import re
 
+from setuptools import find_packages, setup
 
 here = path.dirname(__file__)
 
@@ -58,6 +58,12 @@ setup(
     install_requires=[
         "PyYAML>=5.3,<6",
     ],
+    extras_require={
+        "dev": {
+            "pytest",
+            "tox",
+        }
+    },
     # To provide executable scripts, use entry points in preference to the
     # "scripts" keyword. Entry points provide cross-platform support and allow
     # pip to create the appropriate form of executable for the target platform.
